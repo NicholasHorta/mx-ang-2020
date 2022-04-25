@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'main';
+  component: string = 'r';
+  changeComponentHandler(arg: string){
+    this.component = arg;
+  }
 }

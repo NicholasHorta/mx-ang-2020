@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Recipe } from '../recipe.model';
 
 @Component({
@@ -8,20 +8,22 @@ import { Recipe } from '../recipe.model';
 })
 export class RecipeListComponent implements OnInit {
 
+  @Output() sendRecipe: EventEmitter<Recipe> = new EventEmitter<Recipe>();
+
   //| When we call the Recipe model, our execution IS our constructor firing off with the information to assign
   recipes: Recipe[] = [
     new Recipe(
-      'A test recipe',
+      'Dagwood',
       'Simple test description',
       'https://cdn.pixabay.com/photo/2014/12/21/23/28/recipe-575434_960_720.png'
     ),
     new Recipe(
-      'A test recipe',
+      'Carrot Mash',
       'Simple test description',
       'https://cdn.pixabay.com/photo/2014/12/21/23/28/recipe-575434_960_720.png'
     ),
     new Recipe(
-      'A test recipe',
+      'Broth',
       'Simple test description',
       'https://cdn.pixabay.com/photo/2014/12/21/23/28/recipe-575434_960_720.png'
     ),
@@ -29,7 +31,10 @@ export class RecipeListComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
+
+  loadRecipe(recipe: Recipe){
+    this.sendRecipe.emit(recipe);
+  };
 
 }

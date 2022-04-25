@@ -1,9 +1,9 @@
-<app-header></app-header>
+<app-header (emitChange)="changeComponentHandler($event)"></app-header>
 <div class="container">
   <div class="row">
     <div class="col-row-3">
-      <app-recipes></app-recipes>
-      <app-shopping-list></app-shopping-list>
+      <app-recipes *ngIf="component === 'r'"></app-recipes>
+      <app-shopping-list *ngIf="component === 's'"></app-shopping-list>
     </div>
   </div>
 </div>
