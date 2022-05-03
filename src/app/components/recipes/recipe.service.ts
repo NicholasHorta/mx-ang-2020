@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Recipe } from './recipe.model';
 
 @Injectable({
@@ -11,23 +11,25 @@ export class RecipeService {
   private recipes: Recipe[] = [
     new Recipe(
       'Dagwood',
-      'Simple test description',
+      'Simple Dagwood description',
       'https://cdn.pixabay.com/photo/2014/12/21/23/28/recipe-575434_960_720.png'
     ),
     new Recipe(
       'Carrot Mash',
-      'Simple test description',
+      'Simple Mash description',
       'https://cdn.pixabay.com/photo/2014/12/21/23/28/recipe-575434_960_720.png'
     ),
     new Recipe(
       'Broth',
-      'Simple test description',
+      'Simple Broth description',
       'https://cdn.pixabay.com/photo/2014/12/21/23/28/recipe-575434_960_720.png'
     ),
   ];
 
+  loadRecipe: EventEmitter<Recipe> = new EventEmitter<Recipe>();
+
   getRecipes() {
-    //. Slice gives us a copy of the array
+    // Slice gives us a copy of the array
     return this.recipes.slice();
   }
 }

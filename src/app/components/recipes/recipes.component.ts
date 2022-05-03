@@ -10,16 +10,13 @@ import { RecipeService } from './recipe.service';
 })
 export class RecipesComponent implements OnInit {
 
-  constructor() { }
+  constructor(private recipeService: RecipeService) { }
 
   ngOnInit(): void {
+    this.recipeService.loadRecipe.subscribe((recipe: Recipe) => {
+      this.currentRecipeShown = recipe;
+    });
   }
 
   currentRecipeShown: Recipe; 
-
-  rxRecipe(ev: Recipe){
-    this.currentRecipeShown = ev;
-  }
-
-
-}
+};
