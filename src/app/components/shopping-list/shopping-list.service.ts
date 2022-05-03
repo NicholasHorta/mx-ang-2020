@@ -23,4 +23,10 @@ export class ShoppingListService {
     this.notifyIngredientListUpdate.emit(this.ingredients.slice());
   }
 
+  addIngredients(ingredients: Ingredient[]){
+    console.log("FAGGOT");
+    this.ingredients.push(...ingredients);
+    this.notifyIngredientListUpdate.emit(this.ingredients.slice());
+  }
+
 }
