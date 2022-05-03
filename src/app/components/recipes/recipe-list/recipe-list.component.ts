@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Recipe } from '../recipe.model';
+import { RecipeService } from '../recipe.service';
 
 @Component({
   selector: 'app-recipe-list',
@@ -10,28 +11,13 @@ export class RecipeListComponent implements OnInit {
 
   @Output() sendRecipe: EventEmitter<Recipe> = new EventEmitter<Recipe>();
 
-  //| When we call the Recipe model, our execution IS our constructor firing off with the information to assign
-  recipes: Recipe[] = [
-    new Recipe(
-      'Dagwood',
-      'Simple test description',
-      'https://cdn.pixabay.com/photo/2014/12/21/23/28/recipe-575434_960_720.png'
-    ),
-    new Recipe(
-      'Carrot Mash',
-      'Simple test description',
-      'https://cdn.pixabay.com/photo/2014/12/21/23/28/recipe-575434_960_720.png'
-    ),
-    new Recipe(
-      'Broth',
-      'Simple test description',
-      'https://cdn.pixabay.com/photo/2014/12/21/23/28/recipe-575434_960_720.png'
-    ),
-  ];
+  constructor(private recipeService: RecipeService) { }
 
-  constructor() { }
+  recipes: Recipe[] = [];
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.recipes = this.recipeService.getRecipes();
+  }
 
   loadRecipe(recipe: Recipe){
     this.sendRecipe.emit(recipe);
