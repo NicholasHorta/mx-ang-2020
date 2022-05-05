@@ -7,14 +7,11 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  @Output() emitChange: EventEmitter<string> = new EventEmitter<string>()
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  showComponent(arg: string){
-    this.emitChange.emit(arg);
-  }
+
 
 }
