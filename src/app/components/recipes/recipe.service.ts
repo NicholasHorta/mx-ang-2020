@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
 import { Ingredient } from 'src/app/shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
 import { Recipe } from './recipe.model';
@@ -46,7 +47,6 @@ export class RecipeService {
     ),
   ];
 
-  loadRecipe: EventEmitter<Recipe> = new EventEmitter<Recipe>();
 
   getRecipes() {
     // Slice gives us a copy of the array
