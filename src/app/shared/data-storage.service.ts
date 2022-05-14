@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map, tap } from 'rxjs/operators';
 import { Recipe } from '../components/recipes/recipe.model';
 import { RecipeService } from '../components/recipes/recipe.service';
 
@@ -13,19 +14,25 @@ export class DataStorageService {
   constructor(private http: HttpClient, private recipeService: RecipeService) { }
 
   //: We need to append to our path the COLLECTION (recipes) and add .json  
-  storeRecipes(){
+  storeRecipes() {
     const recipes = this.recipeService.getRecipes();
     return this.http.put('https://mx-recipe-default-rtdb.firebaseio.com/recipes.json', recipes).subscribe(data => {
       console.log(data);
     })
   }
 
-  fetchRecipes(){
-    this.http.get<Recipe[]>('https://mx-recipe-default-rtdb.firebaseio.com/recipes.json').subscribe(data => {
-      console.log(data);
-      //: We will get an error here as we havent informed TS what the TYPE is of the incoming data
-      //: Which we will provide as a type received from the GET 
-      this.recipeService.setRecipes(data);
-    })
+  fetchRecipes() {
+    return this.http.get<Recipe[]>('https://mx-recipe-default-rtdb.firebaseio.com/recipes.json')
+      .pipe(
+        map(recipes => {
+          return recipes.map(recipe => {
+            return { ...recipe, ingredients: recipe.ingredients ? recipe.ingredients : [] };
+          })
+        }),
+        // Allows us to execute some code in place without aletring the data funnelled through the Observable
+        tap(recipes => {
+          this.recipeService.setRecipes(recipes);
+        })
+      )
   }
 }
