@@ -1,8 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, tap } from 'rxjs/operators';
-import { Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Subject, throwError } from 'rxjs';
 import { User } from './user.model';
+import { Router } from '@angular/router';
 
 export interface AuthResponseData {
   kind: string;
@@ -19,11 +20,12 @@ export interface AuthResponseData {
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
    
-  user = new Subject<User>();
-
+  user = new BehaviorSubject<User>(null);
+  
   signUp(email: string, password: string) {
+    console.log('Signup()');
     return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD2WWKhxQEkvxBa8BJ2rA5VWdF5nMHPZi0',
       { email: email, password: password, returnSecureToken: true }).pipe(catchError(this.handleError), tap(resData => {
         this.handleAuthentication(
@@ -36,6 +38,8 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
+    console.log('Login()');
+    console.log(email, password);
     return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD2WWKhxQEkvxBa8BJ2rA5VWdF5nMHPZi0',
       { email, password, returnSecureToken: true }).pipe(catchError(this.handleError), tap(resData => {
       this.handleAuthentication(
@@ -47,7 +51,13 @@ export class AuthService {
     }));
   }
 
+  logout(){
+    this.router.navigate(['/auth']);
+    this.user.next(null);
+  };
+
   private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
+    console.log('HandleAuth()');
     const expDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(
       email,
@@ -55,11 +65,13 @@ export class AuthService {
       token,
       expDate
     );
+    console.log(user)
     this.user.next(user);
   }
 
   private handleError(errorRes: HttpErrorResponse) {
     console.log(errorRes);
+    console.log('handleError()');
     let errorMessage = 'An unknown error occurred!'
     if (!errorRes.error || !errorRes.error.error) {
       return throwError(errorMessage);

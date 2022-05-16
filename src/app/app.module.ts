@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { RecipeDetailComponent } from './components/recipes/recipe-detail/recipe-detail.component';
@@ -18,6 +18,7 @@ import { RecipeEditComponent } from './components/recipes/recipe-edit/recipe-edi
 import { RecipeService } from './components/recipes/recipe.service';
 import { AuthComponent } from './auth/auth.component';
 import { SpinnerComponent } from './shared/spinner/spinner/spinner.component';
+import { AuthInterceptorService } from './auth/auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,15 @@ import { SpinnerComponent } from './shared/spinner/spinner/spinner.component';
     //: We need this for synchronising out HTML and Dynamic Form
     ReactiveFormsModule
   ],
-  providers: [ShoppingListService, RecipeService],
+  providers: [
+    ShoppingListService,
+    RecipeService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

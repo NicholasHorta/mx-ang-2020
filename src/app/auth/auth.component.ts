@@ -22,6 +22,7 @@ export class AuthComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
+    console.log('onSubmit()');
     this.isLoading = true;
     const email = form.value.email;
     const password = form.value.password;
@@ -37,6 +38,7 @@ export class AuthComponent implements OnInit {
     }
 
     authObservable.subscribe(resData => {
+      console.log('authObservable.subscribe');
       console.log(resData);
       this.isLoading = false;
       this.router.navigate(['/recipes'])
